@@ -1,0 +1,56 @@
+The first part of the lab was pretty straight forward.
+I used a while loop until the end of file to read using getchar(),
+	then in the loop, putchar(char) to output the character,
+	and then grab another cahracter.
+===============================
+For the second part of the lab,
+It was really similar to the first part, but you have to use read and write.
+I did another while loop, but in the while, I used
+	read(0, &c, 1)
+to read a character one at a time until the end (that was the argument)
+Inside the loop, I used 
+	write(1, &c , 1)
+c was declared as a regular char.
+===============================
+For the third part of the lab, I had to use strace to find the # of reads and writes.
+The actual size of the file was 5013504 bytes.22
+(a)
+More specifically for part a, I used 
+	strace -c ./catb < (name of 5MB file) > /dev/null
+	strace -c ./catu < (name of 5MB file) > /dev/null
+This outputs the # of reads and writes that each command does.
+For this, I got the following for the catb program:
+	1226           read
+	1224           write
+and I got the following for the catu program:
+	5013506           read
+	5013504           write
+(b)
+For part b, I basically didn't output the stuff to /dev/null:
+	strace -c ./catb < (name of 5MB file)
+	strace -c ./catu < (name of 5MB file)
+For catb:
+	221184           write
+	1226           read
+For catu:
+	5013504           write
+	5013506           read
+
+From this, I can tell that the catu function (using write and read) require a lot
+	more reads and writes if it were to do each byte at a time.
+===============================
+For the 4th part of the lab, I used the time command to find the time it took
+for each of the commands to run.
+I used the following command:
+	time ./catb < 2 > /dev/null
+	time ./catu < 2 > /dev/null
+For catb, I got the following times:
+	real	0m0.120s
+	user	0m0.088s
+	sys	0m0.020s
+For catu, I got the following times:
+	real	0m3.836s
+	user	0m0.916s
+	sys	0m2.592s
+From this, it is clear that the catu command is about 32 times slower than catb
+

@@ -1,0 +1,45 @@
+#!/bin/sh
+
+##THIS DOESN'T SEEM TO WORK FOR LEADING -'s
+#get the first argument
+cd $1
+
+#get all the links and regular files
+ls -A $1 | grep ^"\." > "TEMP.txt"
+ls -lgG $1 | grep ^"[-l]" >> "TEMP.txt"
+
+#delete the information at the beginning
+sed "s/[l-].*:[0-9]* //" "TEMP.txt" > "temp.txt"
+
+curint=0
+listint=0
+
+#read through the file
+while read "curfile"
+do
+    #increment curint
+    curint=$((curint+1))
+
+    #read through the file
+    while read "listfile"
+    do
+	#increment listint
+	listint=$((listint+1))
+
+	#if the current counter is less 
+	if [ $curint -lt $listint ]
+	then
+	    #compare the files
+	    if cmp -s "$curfile" "$listfile" 2> /dev/null > /dev/null
+	    then 
+		#remove the duplicate files
+		rm -fd "$listfile" 2> /dev/null
+	    fi
+	fi
+    done < "temp.txt"
+
+    #reset listint
+    listint=0
+
+done < "temp.txt"
+rm TEMP.txt temp.txt

@@ -1,0 +1,62 @@
+First, download the old version of coreutils
+if you try to ./configure && make, there should be an error when you 
+	try to compile it
+the problem with this is that there are naming errors that are not allowing 
+	the program to compile
+you have to download the renaming patch 
+	wget http://www.cs.ucla.edu/classes/winter11/cs35L/assign/coreutils.diff
+apply the patch inside the coreutil folder
+	patch -p0 <corutils.diff
+this patch fixed a file called futimens that was creating problems
+type the following commands to create 3 special files
+	$ touch -d '1918-11-11 11:00 GMT' wwi-armistice
+	$ touch now
+	$ sleep 1
+	$ touch now1
+	$ ls -lt wwi-armistice now now1
+The output should be something like this if you try to type the following
+	$ ./src/ls -ls wwi-armistice now now1
+===>
+	-rw-r--r-- 1 eggert eggert 0 Nov 11  1918 wwi-armistice
+	-rw-r--r-- 1 eggert eggert 0 Feb  5 15:57 now1
+	-rw-r--r-- 1 eggert eggert 0 Feb  5 15:57 now
+
+Use gdb to step through the code:
+	$ gdbtui --args ./src/ls -lt wwi-armistice now now1
+Look through the code (ls.c) to find something that compares the times of the files
+Notice that it defaults to mtime.
+Search "mtime" and notice the functions that have mtime in it.
+One particular function should be called "compare_mtime", which compares the times.
+Break at that function:
+	(gdb) b compare_mtime
+Then start the debugging:
+	(gdb) start
+Then continue to the next breakpoint
+	(gdb) c
+Then when it stops at compare_mtime, print and 
+	typecast the values being sent to it to find the values.
+	(gdb) print *(struct fileinfo *)a
+		---> for the a, then for the b:
+	(gdb) print *(struct fileinfo *)b
+Copy the two outputs into a texteditor, or keep track of the st_mtim.tv_sec value, and
+	also keep track of the "name" value, which is the name of the file.
+After this, you should notice that the st_mtim.tv_sec value is negative for wwi-armistice.
+The reason for this is because it was created before a specific time. 
+The time should be in seconds, and the value of wwi-armistice is -1613826000.
+Watch the way the cmp_mtime function works.
+The key point that messes up the time stamps is overflowing (a huge neg subtract a hug pos)
+The idea is to see if the math, and if b > a, and b-a is positive, then flip.
+Similarly, if b < a, and a-b is negative, then flip it.
+The idea is that if the difference should be negative, it is, and it isn't overflown.
+
+My code was as follows:
+
+  if ((&b->stat.st_mtim.tv_sec > &a->stat.st_mtim.tv_sec) && 
+	diff < 0)
+ 	diff *= -1;
+  else if ((&b->stat.st_mtim.tv_sec < &a->stat.st_mtim.tv_sec) &&
+	diff > 0)
+  	diff *= -1;  
+This should make a negative-overflow number to show up as negative, and the same for positive.
+
+

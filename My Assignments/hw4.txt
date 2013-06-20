@@ -1,0 +1,21 @@
+create a folder in my home directory (where you work from)
+	"cvsroot"
+use the following command to make it a cvs repo:
+	"cvs -d ~/cs35l/lab4/cvsroot init"
+go inside the coreutils and use the command
+	"cvs -d ~/cs35l/lab4/cvsroot import coreutils coreutils ver_1"
+go back to the home directory and commit it
+	"cvs commit"
+this will create a "coreutil" folder in the home directory
+that's where you want to work to save changes to the repo
+go to the coreutil (not coreutil-8.0) folder, and run the patch
+	"patch -p0 < lab4.diff"
+after that, commit again. this will create a revision "1.2" (the old one was "1.1")
+now you have to compare the two revisions with cvs diff:
+	"cvs diff -u -r 1.2 -r 1.1 > hw4.patch"
+this will create a patch file that shows the difference between the revisions
+test the patch by using the patch command, and then checking 1.3 to 1.1, and there
+	should be no difference.
+
+
+

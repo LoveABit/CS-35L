@@ -1,0 +1,64 @@
+First, copy the patch and put it into a file called my.patch.
+Extract thttpd 2.25b and put the patch into it.
+Do the following to setup the server:
+
+1. patch -p0 < my.patch
+2. sed -ibak 's/getline/get_line/g' extras/htpasswd.c
+3. change configure to work with -g and -fno-stack-protector by searching (CTRL-S) for "-O2" (3 instances should match)
+4. ./configure
+5. make (make clean first/before if necessary) "make clean"
+6. sudo addgroup www
+7. sudo mkdir /usr/local/man/man1
+8. sudo make install
+9. cd /usr/local/man/man1
+10. sudo thttpd -p 8080 -d .
+11. ps -e | grep thttpd
+
+sudo kill -9 PID
+ps -e | grep thttpd 
+sudo thttpd -po 8080 -d .
+sudo gdb <ENTER>
+attach PID
+to crash: localhost:8080?111111111111..11 (at least 1025 characters)
+browser: go to localhost:8080
+
+after crashing, and using "bt" in gdb, this is outputted:
+
+#0  0x008d6416 in __kernel_vsyscall ()
+#1  0x00597941 in raise () from /lib/libc.so.6
+#2  0x0059ae42 in abort () from /lib/libc.so.6
+#3  0x005cf305 in ?? () from /lib/libc.so.6
+#4  0x00652970 in __fortify_fail () from /lib/libc.so.6
+#5  0x0065186a in __chk_fail () from /lib/libc.so.6
+#6  0x00651d1d in __read_chk () from /lib/libc.so.6
+#7  0x0804c06c in read (argc=5, argv=0xbfff56f4) at /usr/include/bits/unistd.h:40
+#8  handle_read (argc=5, argv=0xbfff56f4) at thttpd.c:1607
+#9  main (argc=5, argv=0xbfff56f4) at thttpd.c:807
+
+From this, it is clear that the function "read" is the problem of the crash. It's trying to read more characters than the buffer can possibly hold.
+
+BUILDING AN EXPLOIT:
+I feel like building an exploit here wouldn't be too hard. Since the buffer is only for 1024 characters, and the next characters would overwrite the return address, it would be possible to set those extra characters to return back to the stack. From that, you can put machine code into the buffer, then set the return address to the buffer, and practically execute anything you want to execute. 
+
+For #6, use add "-S" similarly to part 3 up there ^. one time with the stack protector, and one time without it.
+
+After using the command:
+diff thttpd.s thttpd-f.s | grep call
+
+will show the differences between the two files that have lines with "call". 
+
+This gave me the following:
+< 	call	value_required
+< 	call	e_strdup
+> 	call	value_required
+> 	call	e_strdup
+< 	call	__stack_chk_fail
+< 	call	__stack_chk_fail
+< 	call	strlen 
+
+This shows that both of them called two of the same functions,
+value_required and e_strdup.
+
+Without the stack protector, it called three more, 2 __stack_chk_fail's and strlen. 
+
+The one that seems more efficient would be the ones with less functions, but without those important functions, the program could potentially have many problems. People would be able to hack it if those 2 extra functions weren't called.

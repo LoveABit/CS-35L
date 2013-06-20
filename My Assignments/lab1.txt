@@ -1,0 +1,28 @@
+1. Use: man -k [word] (man man)
+2. tar is located in /bin/, and diff is located in /usr/bin/ (use find / -name
+tar, diff - type f 2> /dev/null)
+3. The two executable programs with one character long are 'X' and 'w'. w shows
+ whos logged in and what they are doing. X is a network transparent window 
+system that runs on a wide range of computing and graphics machines.
+(find / -name [a-z],[A-Z],[0-9] -type f 2> /dev/null)
+4. If the clock jumped from 2:00 to 3:00, the cron command will run soon after
+ 3:00.
+If the clock moved back from 3:00 to 2:00, the cron command will not be re-ran 
+during the repeated time. 
+(man cron)
+5. /usr/bin/cc is actually linked to /etc/alternatives/cc, which is linked to 
+/usr/bin/gcc, so it runs /usr/bin/gcc (cd /usr/bin, then ls -l | less, then 
+follow cc)
+6. The +t symbol means to add a restriction delete flag, or sticky bit.
+(man chmod)
+7. 'locate' lets you search for files faster (man -k find, man locate)
+8. find -mtime -3 (man find)
+9. Lots of files have been modified~ (find / -mtime -3)
+10. 240 are symoblic links (find /usr/bin -type l)
+11. It was written by Torbjorn Granlund and Richard M. Stallman. (man cat)
+12. The newest regular file in /usr/lib is libbrasero-burn.so.1.2.0
+(cd /usr/lib/, then ls -l -t)
+13. 'whoami' will print out the name. 'whatis' will print out what the previous
+ one does. 'whereis' will print out the location of a program. (man -k wh)
+14. dw will delete a word (man vim)
+15. locale, by default gets it data from /usr/lib/locale (man locale)

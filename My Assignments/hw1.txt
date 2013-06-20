@@ -1,0 +1,15 @@
+1.1v : / M a Return / S e Return / I n f Return / T e Return $ 0 H 
+1.2v : ? D E Return d d n n n Backspace D n d w H 4 x
+1.3v : / R e Return i A d v a n c e d SP ESC 2 2 G A SP W a y ESC Down $ o ESC
+1.4v : Down 3 d w 1 4 G $ p / S e Return y $ 2 5 G p 2 G p u / e r Return 
+n n n n n n (I see 7 of them) : % s / f e r / f o r / g Return
+
+1.1e : C-s M a Return C-s S e Return C-s I n Return C-s T e Return C-E C-A 
+ESC <
+1.2e : M-g g 2 1 Return C-k C-k C-r D E C-r C-r Return Backspace C-k C-r D E
+ Return M-d Backspace M-< C-d C-d C-d C-d
+1.3e : C-s n s e Return SP A d v a n c e d M-g g 2 2 Return C-E SP W a y Down
+ C-E Return
+1.4e : Down C-k M-g g 1 4 Return C-E C-y C-s S e C-s Left Left C-k C-y M-g g 
+2 5 Return C-y M-g g 2 Return C-y C-_ C-s e r (I see 7 of them) Return M-% f 
+e r Return f o r Return y y

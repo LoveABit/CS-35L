@@ -1,0 +1,23 @@
+#Jonathan Nguy
+#Homework 8
+
+1. If another team has been observing the bytes going across the network, the
+resulting network is still secure because the "hacker" wouldn't be able to do
+anything with the public key. Without the correct private key, the hacker wouldn't
+be able to do anything on the host.
+
+If your team already has the keys generated, and if another team tapped the keystrokes,
+the server should still safe because there would be no need for typing passwords 
+of any sort. On the other hand, if the keys were not generated yet, there would be 
+a need to type in the password, and the other team would get that password. 
+
+The weakness of the setup would only occur during the setup. If another team gets the
+password, that would cause potential problems. Once we get our keys, everything should
+be fine.
+
+2. The --verify command doesn't really verify that I personally created it because
+ it's possible for someone else to have his public key inside my archive, and he could
+ then sign it with his own private key. Using the --verify command would say it's
+ good, but it won't say if I actually signed it or if a "hacker" did. For example, if
+ someone else was turning in my homework for me, he/she would sign it with his/her
+ public and private keys, and --verify would say it's okay.

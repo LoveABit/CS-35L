@@ -1,0 +1,43 @@
+download coreutils 8.0
+unzip it and inside the folder, ./configure && make 
+	to create the source files
+create a test directory to test the rm command
+	mkdir test
+	cd test
+	touch ./-ooops a b c
+	../src/rm *
+you should see the error:
+	rm: invalid option -- 'o'
+	Try `rm ./-ooops' to remove the file `-ooops'.
+	Try `rm --help' for more information.
+the objective is to get rid of the 2nd line to get
+	rm: invalid option -- 'o'
+	Try `rm --help' for more information.
+by unpatching the patch given to us 
+- I tried to use the patch command to undo the patch, 
+	but couldn't find the correct flags to succesfully
+	unpatch the patch given. The flags that were able to unpatch
+	correctly was "-R". "--dry-run" also helped to show what 
+	would have outputted if the command was run, without actually
+	running it.
+	The problem is that the code was changed after the patch
+	was applied, and sometimes it tried to remove lines that 
+	no longer existed.
+	The 1st and 3rd patch seemed to work (to unpatch), but the
+	2nd and 4th patches weren't able to unpatch.The 2nd was 
+	understandable because it was trying to remove a line that
+	wasn't there.
+after manually deleting the lines that have a "+" in the patch,
+	I used the make command in the root directory to get the
+	new rm.
+	Testing it again in coreutils/test, it now outputs the desired
+	error. (The second line no longer exists in the error)
+Use an old version of rm.c ("rm.c.orig") and the new modified rm.c
+	use "diff -u rm.c.orig rm.c > lab4.diff" command to create a file
+	that is the difference between the two files. This creates a patch
+	file that basically removes the lines we don't want anymore.
+	Do the same thing with NEWS with the command:
+	"diff -u NEWS.orig NEWS >> lab4.diff " where NEWS.orig is the original 
+	NEWS before the "unpatch" was applied. It's important to do this in
+	the root directory so it knows that rm.c is in the src directory.
+

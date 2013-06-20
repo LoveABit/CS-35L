@@ -1,0 +1,16 @@
+Q1. The extra "case_long_iso_time_style:" seems like it was type,
+because there was a "case long_iso_time_style:" in the line before it.
+I don't think it was necessary to remove the line, but it didn't
+hurt to take it out.
+
+Q2. If other countries use this version of Coreutils, the month 
+may not be the same in other languages other than English. If 
+there was a way to make the months something familiar to the 
+other languages, that should fix the problem. Other than that, 
+even if other counties aren't familiar with the 
+American-formatted dates, the day and year seems self explanatory, 
+and it shouldn't be hard to understand.
+
+Q3. If you run the script on /dev/null, it will output an error 
+because it is not able to find a random line in an empty file.
+Because the file is empty, the program can't select any line from it.

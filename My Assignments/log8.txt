@@ -1,0 +1,32 @@
+#Jonathan Nguy
+#603 799 761
+#Lab 8
+
+For this lab, I acted as the client.
+My friend was the host and created the server by typing:
+	$ sudo apt-get install openssh-server
+
+As a client, I needed to create a public key and send it to the host.
+To create the public key, I used the following command:
+	$ ssh-keygen
+
+To copy the key to the host, I had to type the following command:
+	$ scp /home/jon/.ssh/id_rsa.pub name@ipaddress:.ssh/authorized_keys
+This would send the key to the host.
+
+After this, I had to ssh to the server:
+	$ ssh name@ipaddress
+
+While in the server, I had to add the public key to the list of authorized keys.
+I used the command:
+	$ cat id_rsa.pub >> ~/.ssh/authorized_keys
+
+I exited the ssh:
+	$ exit
+
+I tried to use port forwarding by using the command:
+	$ ssh -X name@ipaddress
+
+Typing 
+	$ xterm 
+created a new window

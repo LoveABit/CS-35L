@@ -1,0 +1,14 @@
+downloaded coreutils 7.6 from the website
+checked locale to make sure it was what I wanted
+used the coreutil 7.6 ls command to see what it outputted.
+	it outputted the output in YYYY-MM-DD format
+looked through patch page and looked for the patch
+copied the patch into a document
+	the patch starts at @@, but you can copy before it
+going in coreutil directory, typed ./configure && make
+it should make the source files for everything, including ls
+move the patch file into the the coreutil directory,
+	then use the patch command (patch -p1 < my.patch)
+	-p1 is to ignore "a/" and "b/" from the source
+the new ls should work 
+

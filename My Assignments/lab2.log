@@ -1,0 +1,87 @@
+Jonathan Nguy
+603 799 761
+
+tr -c 'A-Za-z' '[\n*]' < input
+   lists all the words and newlines of its input file
+tr -cs 'A-Za-z' '[\n*]' < input
+   lists all the words and newlines of the input file, but doesn't 
+   consider repeats of the newlines
+tr -cs 'A-Za-z' '[\n*]' < input | sort
+   lists all the sequence of letters (possibly 'words'), in alphabetical
+   order (in ASCII values)
+tr -cs 'A-Za-z' '[\n*]' < input | sort -u
+   lists all the "words" in alphabetical order (in ASCII values),
+   ignoring repeats
+tr -cs 'A-Za-z' '[\n*]' < input | sort -u | comm - words
+   compares the english dictionary with the html words, and lists:
+   lines unique to the input in column 1
+   lines unique to words in column 2
+   lines unique that appear in both fields in column 3
+tr -cs 'A-Za-z' '[\n*]' < input | sort -u | comm -23 - words
+   compares the english dictionary with the html words, and lists only
+   the lines unique to the input (aka words NOT in the dictionary)
+
+My buildwords.sh:
+====================
+#!/bin/sh
+
+tr -cs 'A-Za-z<*>`' < hwnwdseng.htm > hwn2.txt
+
+#remove <u> </u> <small> </small>
+sed 's/<u>//g' hwn2.txt > hwn2a.txt
+sed 's/<.u>//g' hwn2a.txt > hwn2b.txt
+sed 's/<small>//g' hwn2b.txt > hwn2a.txt
+sed 's/<.small>//g' hwn2a.txt > hwn2b.txt
+
+#change ` to '
+sed 's/`/\x27/g' hwn2b.txt > hwn2a.txt
+
+#remove <td> and </td> uppercase to lowercase
+grep -o "<td>.*</td>" hwn2a.txt > hwn2b.txt
+sed 's/<.td>//g' hwn2b.txt > hwn2a.txt
+sed 's/<td>//g' hwn2a.txt > hwn2b.txt
+
+#remove blank lines
+sed '/^$/d' hwn2b.txt > hwn2a.txt
+#remove every other line (english words)
+sed -n 0~2p hwn2a.txt > hwn2b.txt
+#replace ", " with a new line (aka. new word)
+sed 's/, /\n/g' hwn2b.txt > hwn2a.txt
+#replace spaces with new line (another word)
+sed 's/ /\n/g' hwn2a.txt > hwn2b.txt
+#ignore improper words
+grep -o ^[pk\'mnwlhaeiou]*$ < hwn2b.txt > hwn2a.txt
+#sort the list
+sort -u hwn2a.txt > hwords
+
+#hwords with itself
+tr -cs "pk\'mnwlhaeiou" "[\n*]" < hwords | sort -u | \
+comm -23 - hwords > hwords.txt
+#uppercase to lowercase
+tr '[:upper:]' '[:lower:]' < assign2.html > asn2.html
+#webpage with hawaiian words
+tr -cs "A-Za-z" "[\n*]" < asn2.html | sort -u | \
+#I commented this line because instead of checking ALL words with 
+#the Hawaiian dictionary, this line would only check possible 
+#Hawaiian words (words with only those letters)
+#tr -cs "pk\'mnwlhaeiou" "[\n*]" < asn2.html | sort -u | \
+comm -23 - hwords > hwnmiss.txt
+#webpage with english words
+tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | \
+comm -23 - words2 > engmiss.txt 
+#misspelled in english but not hawaiian
+tr '[:upper:]' '[:lower:]' < engmiss.txt > engmisstemp.txt
+tr -cs 'A-Za-z' '[\n*]' < engmisstemp.txt | sort -u | \
+comm -12 - hwords > engnothwn.txt
+#rm engmisstemp.txt
+#misspelled in hawaiian but not in english
+tr -cs "A-Za-z" "[\n*]" < hwnmiss.txt | sort -u | \
+comm -12 - words2 > hwnnoteng.txt
+===================
+There is no misspelling when comparing the hwords to itself.
+
+There are 48 misspelled English words.
+There are 385 misspelled Hawaiian words.
+There are 0 misspelled English words that are not misspelled in Hawaiian.
+There are 369 misspelled Hawaiian words that are not misspelled in English.
+	ie. a, assume, assignment, whose, which

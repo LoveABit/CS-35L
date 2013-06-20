@@ -1,0 +1,17 @@
+The following are listed from most urgent to least urgent:
+
+1. VU#945216 (2001-10-24) SSH CRC32 attack detection code contains remote integer overflow
+This threat seemed to be the most harmful, because it affected the most systems. Also, it was possible to hack any SSH daemon by sending it a certain packet, so any system can potentially be hacked remotely, which makes it even more dangerous.
+
+2. VU#507652 (2010-04-02) Oracle Sun Java fails to properly validate Java applet signatures
+This threat seemed more serious than the rest, because it would be hard to know if the alowed applets had a change in code. I think this one is one of the hardest for a normal user to actually catch, and there is a lot of potential damage that can happen.
+
+3. VU#943165 (2010-05-10) Apple Safari window object invalid pointer vulnerability
+This one seems a bit harder to exploit because it has to due with a specific browser, and it isn't that popular compared to the other ones.  
+Because it's through Javascript, and pretty much every computer uses it, it seems like a higher threat than the other two.
+
+4. VU#964549 (2010-03-23) Mozilla WOFF decoder integer overflow
+This threat didn't seem as harmful as the other ones because it requires a certain browser, and it requires someone to supply a malicious Web Open Fonts Format file to exploit the vulnerability. It's easy to stop Firefox from downloading remote fonts, and that will prevent anything bad to happen to the system.
+
+5. VU#886582 (2010-04-19) Java Deployment Toolkit insufficient argument validation
+This was seemed to be the least urgent because it requires a "specially crafted HTML document" and the victum would have to visit it. With the security now, it seems like seeing that a website is malicious is pretty easy. The potential threat of this does not seem very high. 

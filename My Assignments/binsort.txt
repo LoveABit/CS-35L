@@ -1,0 +1,40 @@
+// For the 5 MB file,
+jon@jon:~/cs35l/lab6$ time ./binsortuu 5 < 2 > /dev/null
+Number of comparisons: 18721906
+
+real	0m0.572s
+user	0m0.532s
+sys	0m0.012s
+jon@jon:~/cs35l/lab6$ time ./binsortu 5 < 2 > /dev/null
+
+real	0m0.621s
+user	0m0.604s
+sys	0m0.000s
+
+// For a 10 MB file,
+jon@jon:~/cs35l/lab6$ time ./binsortuu 5 < 1 > /dev/null
+Number of comparisons: 39454456
+
+real	0m1.165s
+user	0m1.124s
+sys	0m0.012s
+jon@jon:~/cs35l/lab6$ time ./binsortu 5 < 1 > /dev/null
+
+real	0m1.376s
+user	0m1.268s
+sys	0m0.012s
+
+//For the source code binsortuu.c
+jon@jon:~/cs35l/lab6$ time ./binsortuu 5 < binsortuu.c > /dev/null
+Number of comparisons: 2884
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+jon@jon:~/cs35l/lab6$ time ./binsortu 5 < binsortuu.c > /dev/null
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+
+///From what I can tell, they're both extremely similar, but binsortuu is a bit faster.
